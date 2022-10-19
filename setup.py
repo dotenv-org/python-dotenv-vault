@@ -7,18 +7,20 @@ dir = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(dir, "src/dotenv", "__version__.py"), "r") as f:
     exec(f.read(), src)
 
-with open("README.md", "r") as f:
-    readme = f.read()
+def read_files(files):
+    data = []
+    for file in files:
+        with open(file, encoding='utf-8') as f:
+            data.append(f.read())
+    return "\n".join(data)
 
-# 'setup.py publish' shortcut.
-if sys.argv[-1] == "publish":
-    os.system("python setup.py sdist")
-    os.system(f"twine upload dist/python-dotenv-vault-{src['__version__']}.tar.gz")
-    sys.exit()
+readme = read_files(['README.md', 'CHANGELOG.md'])
 
 setup(
     name='python-dotenv-vault',
     description=src['__description__'],
+    long_description=readme,
+    long_description_content_type='text/markdown',
     version=src['__version__'],
     license=src['__license__'],
     author=src['__author__'],
