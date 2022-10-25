@@ -23,7 +23,6 @@ def load_dotenv(
     This is to inject the parameters to evironment variables.
     """
     dotenv_vault = DotEnvVault()
-    logger.info(f'dotenv_key:{dotenv_vault.dotenv_key}')
     if dotenv_vault.dotenv_key:
         logger.info('Getting .env from vault.')
         vault_stream = dotenv_vault.parsed_vault()

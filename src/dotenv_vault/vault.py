@@ -50,7 +50,7 @@ class DotEnvVault(): #vault stuff
 
         # Getting ciphertext from correct environment in .env.vault
         environment_key = f'DOTENV_VAULT_{vault_environment}'
-        logging.info(f'Getting {environment_key}.')
+        logging.info(f'Getting key from {environment_key}.')
 
         # use python-dotenv library class.
         dotenv = DotEnv(dotenv_path=env_vault_path)

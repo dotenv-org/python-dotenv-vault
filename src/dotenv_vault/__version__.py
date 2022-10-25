@@ -7,7 +7,7 @@
 __title__ = "python-dotenv-vault"
 __description__ = "Syncing your .env to the cloud."
 __url__ = "https://github.com/dotenv-org/dotenv-vault-python"
-__version__ = "0.0.7"
+__version__ = "0.0.8"
 __author__ = "dotenv"
 __author_email__ = "mot@dotenv.org"
 __license__ = "MIT"
