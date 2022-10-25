@@ -8,3 +8,9 @@ dotenv-vault-python allows your app to sync the `.env` file to the cloud. This m
 ```shell
 pip install python-dotenv-vault --no-cache-dir
 ```
+
+```shell
+from dotenv_vault import load_dotenv
+
+load_dotenv()
+```

@@ -15,6 +15,14 @@ clean-pyc:
 build: clean
 	python setup.py sdist bdist_wheel
 
+uninstall_local:
+	pip uninstall python-dotenv-vault -y
+
+install_local:
+	pip install .
+
+test: uninstall_local build install_local
+
 release: build
 	twine check dist/*
 	twine upload dist/*

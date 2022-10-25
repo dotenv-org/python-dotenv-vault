@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 src = {}
 dir = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(dir, "src/dotenv", "__version__.py"), "r") as f:
+with open(os.path.join(dir, "src/dotenv_vault", "__version__.py"), "r") as f:
     exec(f.read(), src)
 
 def read_files(files):
@@ -39,5 +39,8 @@ setup(
     'python',
     'dotenv-vault'
     ],
-    install_requires=[],
+    install_requires=[
+        'python-dotenv~=0.21.0',
+        'cryptography~=38.0.1'
+    ],
 )
