@@ -26,7 +26,8 @@ def load_dotenv(
     if dotenv_vault.dotenv_key:
         logger.info('Getting .env from vault.')
         vault_stream = dotenv_vault.parsed_vault()
-        return load_dotenv_file(stream=vault_stream)
+        # we're going to override the .vault to any existing keys in local
+        return load_dotenv_file(stream=vault_stream, override=True)
     else:
         logger.info('Getting .env from local.')
         return load_dotenv_file()

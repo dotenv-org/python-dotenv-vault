@@ -33,7 +33,7 @@ class DotEnvVault(): #vault stuff
         if self.dotenv_key is None: raise DotEnvVaultError("NOT_FOUND_DOTENV_KEY: Cannot find ENV['DOTENV_KEY']")
             
         # .env.vault needs to be present.
-        env_vault_path = find_dotenv(filename='.env.vault')
+        env_vault_path = find_dotenv(filename='.env.vault', usecwd=True)
         if env_vault_path == '':
             raise DotEnvVaultError("ENV_VAULT_NOT_FOUND: .env.vault is not present.")
 
@@ -55,6 +55,9 @@ class DotEnvVault(): #vault stuff
         # use python-dotenv library class.
         dotenv = DotEnv(dotenv_path=env_vault_path)
         ciphertext = dotenv.dict().get(environment_key)
+
+        if not ciphertext:
+            raise DotEnvVaultError('Environment Key is not found. Run `npx dotenv-vault build`.')
 
         decrypted = self._decrypt(ciphertext=ciphertext, key=key)
         return self._to_text_stream(decrypted)
