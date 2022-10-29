@@ -8,10 +8,6 @@ Dotenv Vault extends the proven & trusted foundation of [python-dotenv](https://
 
 The extended standard lets you sync your `.env` files – quickly & securely. Stop sharing them over insecure channels like Slack and email, and never lose an important `.env` file again.
 
-You need a [Dotenv Account](https://dotenv.org) to use Dotenv Vault. It is free to use with premium features.
-
-**[Create your account](https://dotenv.org/signup)**
-
 ## Installation
 
 ```shell
@@ -124,8 +120,6 @@ Made a change to your production envs? Run `npx dotenv-vault build`, commit that
 [Learn more](https://www.dotenv.org/docs/tutorials/integrations)
 
 ## Dotenv.org
-
-**[Create your account](https://dotenv.org/signup)**
 
 You need a [Dotenv Account](https://dotenv.org) to use Dotenv Vault. It is free to use with premium features.
 
