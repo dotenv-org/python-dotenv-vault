@@ -2,7 +2,7 @@
 
 <img src="https://raw.githubusercontent.com/motdotla/dotenv/master/dotenv.svg" alt="dotenv-vault" align="right" width="200" />
 
-[![PyPI version][https://badge.fury.io/py/python-dotenv-vault.svg]][http://badge.fury.io/py/python-dotenv-vault]
+[![PyPI version](https://badge.fury.io/py/python-dotenv-vault.svg)](http://badge.fury.io/py/python-dotenv-vault)
 
 Dotenv Vault extends the proven & trusted foundation of [python-dotenv](https://github.com/theskumar/python-dotenv), with a `.env.vault` file.
 
@@ -76,6 +76,8 @@ That's it!
 
 You just synced your `.env` file. Commit your `.env.vault` file to code, and tell your teammates to run `npx dotenv-vault pull`.
 
+[Learn more](https://www.dotenv.org/docs/tutorials/sync)
+
 ## Multiple Environments
 
 Run the command:
@@ -86,7 +88,9 @@ $ npx dotenv-vault open production
 
 It will open up an interface to manage your production environment variables.
 
-## Integrate Anywhere [docs](https://www.dotenv.org/docs/tutorials/integrations)
+[Learn more](https://www.dotenv.org/docs/tutorials/environments)
+
+## Integrate Anywhere™
 
 Build your encrypted `.env.vault`:
 
@@ -116,6 +120,8 @@ $ heroku config:set DOTENV_KEY="dotenv://:key_1234@dotenv.org/vault/.env.vault?e
 All set! When your app boots, it will recognize a `DOTENV_KEY` is set, decrypt the `.env.vault` file, and load the variables to `ENV`.
 
 Made a change to your production envs? Run `npx dotenv-vault build`, commit that safely to code, and deploy. It's simple and safe like that.
+
+[Learn more](https://www.dotenv.org/docs/tutorials/integrations)
 
 ## Dotenv.org
 
