@@ -4,7 +4,7 @@
 
 [![PyPI version](https://badge.fury.io/py/python-dotenv-vault.svg)](http://badge.fury.io/py/python-dotenv-vault)
 
-Dotenv Vault extends the proven & trusted foundation of [python-dotenv](https://github.com/theskumar/python-dotenv), with a `.env.vault` file.
+Extends the proven & trusted foundation of [python-dotenv](https://github.com/theskumar/python-dotenv), with a `.env.vault` file.
 
 The extended standard lets you sync your `.env` files – quickly & securely. Stop sharing them over insecure channels like Slack and email, and never lose an important `.env` file again.
 
