@@ -30,4 +30,11 @@ def load_dotenv(
         return load_dotenv_file(stream=vault_stream, override=True)
     else:
         logger.info('Getting .env from local.')
-        return load_dotenv_file()
+        return load_dotenv_file(
+            dotenv_path=dotenv_path,
+            stream=stream, 
+            verbose=verbose, 
+            override=override, 
+            interpolate=interpolate, 
+            encoding=encoding
+            )
