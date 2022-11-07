@@ -38,20 +38,20 @@ class DotEnvVault(): #vault stuff
             key = uri.password
             # Get environment from query params.
             params = dict(parse_qsl(uri.query))
-            vault_environment = params.get('environment').upper()
+            vault_environment = params.get('environment')
 
-            if vault_environment is None or vault_environment not in ['PRODUCTION', 'DEVELOPMENT', 'CI', 'STAGING']:
-                raise DotEnvVaultError('Incorrect Vault Environment. It is: {vault_environment}')
+            if not vault_environment:
+                raise DotEnvVaultError('INVALID_DOTENV_KEY: Missing environment part')
 
             # Getting ciphertext from correct environment in .env.vault
-            environment_key = f'DOTENV_VAULT_{vault_environment}'
+            environment_key = f'DOTENV_VAULT_{vault_environment.upper()}'
 
             # use python-dotenv library class.
             dotenv = DotEnv(dotenv_path=env_vault_path)
             ciphertext = dotenv.dict().get(environment_key)
 
             if not ciphertext:
-                raise DotEnvVaultError('Environment Key is not found. Run `npx dotenv-vault build`.')
+                raise DotEnvVaultError(f"NOT_FOUND_DOTENV_ENVIRONMENT: Cannot locate environment {environment_key} in your .env.vault file. Run 'npx dotenv-vault build' to include it.")
 
             keys.append({
                 'encrypted_key': key,
