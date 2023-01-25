@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [Unreleased](https://github.com/dotenv-org/python-dotenv-vault/compare/v0.2.0...master)
 
+## 0.3.0
+
+### Added
+
+- Added backward compatibility python version 3.7+
+
 ## 0.2.0
 
 ### Added
