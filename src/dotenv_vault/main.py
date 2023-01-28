@@ -27,7 +27,7 @@ def load_dotenv(
     dotenv_vault = DotEnvVault()
     if dotenv_vault.dotenv_key:
         logger.info('Loading env from encrypted .env.vault')
-        vault_stream = dotenv_vault.parsed_vault()
+        vault_stream = dotenv_vault.parsed_vault(dotenv_path=dotenv_path)
         # we're going to override the .vault to any existing keys in local
         return load_dotenv_file(stream=vault_stream, override=True)
     else:

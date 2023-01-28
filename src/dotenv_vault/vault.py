@@ -7,7 +7,6 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.exceptions import InvalidTag
 from base64 import b64decode
 from urllib.parse import urlparse, parse_qsl
-
 from dotenv.main import DotEnv, find_dotenv
 
 
@@ -20,18 +19,19 @@ class DotEnvVault(): #vault stuff
         self.dotenv_key = os.environ.get('DOTENV_KEY')
         
 
-    def parsed_vault(self) -> bytes:
+    def parsed_vault(self, dotenv_path: str) -> bytes:
         """
         Parse information from DOTENV_KEY, and decrypt vault key.
         """
         if self.dotenv_key is None: raise DotEnvVaultError("NOT_FOUND_DOTENV_KEY: Cannot find ENV['DOTENV_KEY']")
 
-        # .env.vault needs to be present.
-        env_vault_path = find_dotenv(filename='.env.vault', usecwd=True)
-        keys = []
-        if env_vault_path == '':
+        # if dotenv_path is not present, then it will try to find default .env.vault file
+        env_vault_path = dotenv_path if dotenv_path else find_dotenv(filename='.env.vault', usecwd=True)
+
+        if not env_vault_path:
             raise DotEnvVaultError("ENV_VAULT_NOT_FOUND: .env.vault is not present.")
 
+        keys = []
         dotenv_keys = [i.strip() for i in self.dotenv_key.split(',')]
         for _key in dotenv_keys:    
             # parse DOTENV_KEY, format is a URI
