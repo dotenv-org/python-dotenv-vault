@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [Unreleased](https://github.com/dotenv-org/python-dotenv-vault/compare/v0.2.0...master)
 
+## 0.4.0
+
+### Added
+
+- Added feature to allow custom .env.vault path
+
 ## 0.3.0
 
 ### Added
