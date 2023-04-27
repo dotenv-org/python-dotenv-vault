@@ -1,14 +1,19 @@
-# python-dotenv-vault
+# python-dotenv-vault [![PyPI version](https://badge.fury.io/py/python-dotenv-vault.svg)](http://badge.fury.io/py/python-dotenv-vault)
 
 <img src="https://raw.githubusercontent.com/motdotla/dotenv/master/dotenv.svg" alt="dotenv-vault" align="right" width="200" />
 
-[![PyPI version](https://badge.fury.io/py/python-dotenv-vault.svg)](http://badge.fury.io/py/python-dotenv-vault)
-
 Extends the proven & trusted foundation of [python-dotenv](https://github.com/theskumar/python-dotenv), with a `.env.vault` file.
 
-The extended standard lets you sync your `.env` files – quickly & securely. Stop sharing them over insecure channels like Slack and email, and never lose an important `.env` file again.
+The extended standard lets you load encrypted secrets from your `.env.vault` file in production (and other) environments. Brought to you by the same people that pioneered [dotenv-nodejs](https://github.com/motdotla/dotenv).
 
-## Installation
+* [🌱 Install](#-install)
+* [🏗️ Usage (.env)](#%EF%B8%8F-usage)
+* [🚀 Deploying (.env.vault) 🆕](#-deploying)
+* [🌴 Multiple Environments](#-manage-multiple-environments)
+* [❓ FAQ](#-faq)
+* [⏱️ Changelog](./CHANGELOG.md)
+
+## 🌱 Install
 
 ```shell
 pip install python-dotenv-vault
@@ -25,11 +30,9 @@ load_dotenv()  # take environment variables from .env.
 # `os.getenv`) as if they came from the actual environment.
 ```
 
-## Usage
+## 🏗️ Usage
 
-### `.env`
-
-Basic usage works just like [python-dotenv](https://github.com/theskumar/python-dotenv).
+Development usage works just like [python-dotenv](https://github.com/theskumar/python-dotenv).
 
 Add your application configuration to your `.env` file in the root of your project:
 
@@ -45,96 +48,81 @@ s3_bucket = os.getenv("S3_BUCKET")
 print(s3_bucket)
 ```
 
-### `.env.vault`
+## 🚀 Deploying
 
-The `.env.vault` extends `.env`. It facilitates syncing your .env file across machines, team members, and environments.
-
-Usage is similar to git. In the same directory as your `.env` file, run the command:
+Encrypt your environment settings by doing:
 
 ```shell
-$ npx dotenv-vault new
+npx dotenv-vault local build
 ```
 
-Follow those instructions and then run:
+This will create an encrypted `.env.vault` file along with a `.env.keys` file containing the encryption keys. Set the `DOTENV_KEY` environment variable by copying and pasting the key value from the `.env.keys` file onto your server or cloud provider. For example in heroku:
 
 ```shell
-$ npx dotenv-vault login
+heroku config:set DOTENV_KEY=<key string from .env.keys>
 ```
 
-Then run push and pull:
+Commit your .env.vault file safely to code and deploy. Your .env.vault fill be decrypted on boot, its environment variables injected, and your app work as expected.
+
+Note that when the `DOTENV_KEY` environment variable is set, environment settings will *always* be loaded from the `.env.vault` file in the project root. For development use, you can leave the `DOTENV_KEY` environment variable unset and fall back on the `dotenv` behaviour of loading from `.env` or a specified set of files (see [here in the `dotenv` README](https://github.com/bkeepers/dotenv#usage) for the details).
+
+## 🌴 Manage Multiple Environments
+
+You have two options for managing multiple environments - locally managed or vault managed - both use [dotenv-vault](https://github.com/dotenv-org/dotenv-vault).
+
+Locally managed never makes a remote API call. It is completely managed on your machine. Vault managed adds conveniences like backing up your .env file, secure sharing across your team, access permissions, and version history. Choose what works best for you.
+
+#### 💻 Locally Managed
+
+Create a `.env.production` file in the root of your project and put your production values there.
 
 ```shell
+# .env.production
+S3_BUCKET="PRODUCTION_S3BUCKET"
+SECRET_KEY="PRODUCTION_SECRETKEYGOESHERE"
+```
+
+Rebuild your `.env.vault` file.
+
+```shell
+npx dotenv-vault local build
+```
+
+View your `.env.keys` file. There is a production `DOTENV_KEY` that pairs with the `DOTENV_VAULT_PRODUCTION` cipher in your `.env.vault` file.
+
+Set the production `DOTENV_KEY` on your server, recommit your `.env.vault` file to code, and deploy. That's it!
+
+Your .env.vault fill be decrypted on boot, its production environment variables injected, and your app work as expected.
+
+#### 🔐 Vault Managed
+
+Sync your .env file. Run the push command and follow the instructions. It works a lot like git. [learn more](/docs/sync/quickstart)
+
+```
 $ npx dotenv-vault push
-$ npx dotenv-vault pull
 ```
 
-That's it!
+Manage multiple environments with the included UI. [learn more](/docs/tutorials/environments)
 
-You just synced your `.env` file. Commit your `.env.vault` file to code, and tell your teammates to run `npx dotenv-vault pull`.
-
-[Learn more](https://www.dotenv.org/docs/tutorials/sync)
-
-## Multiple Environments
-
-Run the command:
-
-```shell
-$ npx dotenv-vault open production
+```
+$ npx dotenv-vault open
 ```
 
-It will open up an interface to manage your production environment variables.
+Build your `.env.vault` file with multiple environments.
 
-[Learn more](https://www.dotenv.org/docs/tutorials/environments)
-
-## Integrate Anywhere™
-
-Build your encrypted `.env.vault`:
-
-```shell
+```
 $ npx dotenv-vault build
 ```
 
-Safely commit and push your changes:
+Access your `DOTENV_KEY`.
 
-```shell
-$ git commit -am "Updated .env.vault"
-$ git push
 ```
-
-Obtain your `DOTENV_KEY`:
-
-```shell
 $ npx dotenv-vault keys
 ```
 
-Set `DOTENV_KEY` on your infrastructure. For example, on Heroku:
+Set the production `DOTENV_KEY` on your server, recommit your `.env.vault` file to code, and deploy. That's it!
 
-```shell
-$ heroku config:set DOTENV_KEY="dotenv://:key_1234@dotenv.org/vault/.env.vault?environment=production"
-```
-
-All set! When your app boots, it will recognize a `DOTENV_KEY` is set, decrypt the `.env.vault` file, and load the variables to `ENV`.
-
-Made a change to your production envs? Run `npx dotenv-vault build`, commit that safely to code, and deploy. It's simple and safe like that.
-
-[Learn more](https://www.dotenv.org/docs/tutorials/integrations)
-
-## Dotenv.org
-
-You need a [Dotenv Account](https://dotenv.org) to use Dotenv Vault. It is free to use with premium features.
-
-![](https://api.checklyhq.com/v1/badges/checks/c2fee99a-38e7-414e-89b8-9766ceeb1927?style=flat&theme=dark&responseTime=true)
-![](https://api.checklyhq.com/v1/badges/checks/4f557967-1ed1-486a-b762-39a63781d752?style=flat&theme=dark&responseTime=true)
-<br>
-![](https://api.checklyhq.com/v1/badges/checks/804eb6fa-6599-4688-a649-7ff3c39a64b9?style=flat&theme=dark&responseTime=true)
-![](https://api.checklyhq.com/v1/badges/checks/6a94504e-e936-4f07-bc0b-e08fee2734b3?style=flat&theme=dark&responseTime=true)
-<br>
-![](https://api.checklyhq.com/v1/badges/checks/06ac4f4e-3e0e-4501-9987-580b4d2a6b06?style=flat&theme=dark&responseTime=true)
-![](https://api.checklyhq.com/v1/badges/checks/0ffc1e55-7ef0-4c2c-8acc-b6311871f41c?style=flat&theme=dark&responseTime=true)
-
-Visit [health.dotenv.org](https://health.dotenv.org) for more information.
-
-## FAQ
+## ❓ FAQ
 
 #### What happens if `DOTENV_KEY` is not set?
 
