@@ -126,7 +126,7 @@ Set the production `DOTENV_KEY` on your server, recommit your `.env.vault` file 
 
 #### What happens if `DOTENV_KEY` is not set?
 
-Dotenv Vault gracefully falls back to [dotenv](https://github.com/bkeepers/dotenv) when `DOTENV_KEY` is not set. This is the default for development so that you can focus on editing your `.env` file and save the `build` command until you are ready to deploy those environment variables changes.
+Dotenv Vault gracefully falls back to [python-dotenv](https://github.com/theskumar/python-dotenv) when `DOTENV_KEY` is not set. This is the default for development so that you can focus on editing your `.env` file and save the `build` command until you are ready to deploy those environment variables changes.
 
 #### Should I commit my `.env` file?
 
