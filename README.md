@@ -19,17 +19,6 @@ The extended standard lets you load encrypted secrets from your `.env.vault` fil
 pip install python-dotenv-vault
 ```
 
-As early as possible in your application bootstrap process, load .env:
-
-```python
-from dotenv_vault import load_dotenv
-
-load_dotenv()  # take environment variables from .env.
-
-# Code of your application, which uses environment variables (e.g. from `os.environ` or
-# `os.getenv`) as if they came from the actual environment.
-```
-
 ## 🏗️ Usage
 
 Development usage works just like [python-dotenv](https://github.com/theskumar/python-dotenv).
@@ -39,6 +28,17 @@ Add your application configuration to your `.env` file in the root of your proje
 ```shell
 S3_BUCKET=YOURS3BUCKET
 SECRET_KEY=YOURSECRETKEYGOESHERE
+```
+
+As early as possible in your application bootstrap process, load .env:
+
+```python
+from dotenv_vault import load_dotenv
+
+load_dotenv()  # take environment variables from .env.
+
+# Code of your application, which uses environment variables (e.g. from `os.environ` or
+# `os.getenv`) as if they came from the actual environment.
 ```
 
 When your application loads, these variables will be available in `os.environ` or `os.getenv`:
