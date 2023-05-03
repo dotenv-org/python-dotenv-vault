@@ -1,7 +1,7 @@
 __title__ = "python-dotenv-vault"
 __description__ = "Decrypt .env.vault file."
 __url__ = "https://github.com/dotenv-org/python-dotenv-vault"
-__version__ = "0.5.0"
+__version__ = "0.5.1"
 __author__ = "dotenv"
 __author_email__ = "mot@dotenv.org"
 __license__ = "MIT"
