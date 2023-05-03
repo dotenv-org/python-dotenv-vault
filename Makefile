@@ -13,7 +13,7 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 
 build: clean
-	python setup.py sdist bdist_wheel
+	python -m build
 
 uninstall_local:
 	pip uninstall python-dotenv-vault -y
@@ -21,7 +21,8 @@ uninstall_local:
 install_local:
 	pip install .
 
-test: uninstall_local build install_local
+test: install_local
+	python -m unittest -v dotenv_vault.test_vault
 
 release: build
 	twine check dist/*
