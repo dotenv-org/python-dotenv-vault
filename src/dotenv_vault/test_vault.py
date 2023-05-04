@@ -43,8 +43,8 @@ class TestParsing(unittest.TestCase):
     PARSE_TEST_KEY = "dotenv://:key_0dec82bea24ada79a983dcc11b431e28838eae59a07a8f983247c7ca9027a925@dotenv.local/vault/.env.vault?environment=development"
 
     PARSE_TEST_VAULT = """# .env.vault (generated with npx dotenv-vault local build)
-DOTENV_VAULT_DEVELOPMENT="H2A2wOUZU+bjKH3kTpeua9iIhtK/q7/VpAn+LLVNnms+CtQ/cwXqiw=="
-"""
+                        DOTENV_VAULT_DEVELOPMENT="H2A2wOUZU+bjKH3kTpeua9iIhtK/q7/VpAn+LLVNnms+CtQ/cwXqiw=="
+                        """
                 
     def test_vault_parsing(self):
         old_dotenv_key = os.environ.get("DOTENV_KEY")
@@ -57,4 +57,3 @@ DOTENV_VAULT_DEVELOPMENT="H2A2wOUZU+bjKH3kTpeua9iIhtK/q7/VpAn+LLVNnms+CtQ/cwXqiw
             os.unsetenv("DOTENV_KEY")
             if old_dotenv_key:
                 os.environ["DOTENV_KEY"] = old_dotenv_key
-        
