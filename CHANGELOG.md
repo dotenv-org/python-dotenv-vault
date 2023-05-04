@@ -2,17 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [Unreleased](https://github.com/dotenv-org/python-dotenv-vault/compare/v0.5.0...master)
+## [Unreleased](https://github.com/dotenv-org/python-dotenv-vault/compare/v0.5.1...master)
+
+## 0.5.1
+
+### Changed
+
+- Fix error reference [#10](https://github.com/dotenv-org/python-dotenv-vault/pull/10)
 
 ## 0.5.0
 
 ### Added
 
- - Reorganise and simplify code
- - Make API correspond more closely to `python-dotenv`
- - Improve error handling
- - Add tests and CI
- - Upgrade to `build` for release build
+- Reorganise and simplify code
+- Make API correspond more closely to `python-dotenv`
+- Improve error handling
+- Add tests and CI
+- Upgrade to `build` for release build
  
 ## 0.4.1
 
