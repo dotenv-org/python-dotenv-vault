@@ -112,7 +112,7 @@ def parse_key(dotenv_key):
     # of the URI, possibly with a prefix.
     key = uri.password
     if len(key) < KEY_LENGTH: 
-        raise DotEnvVault('INVALID_DOTENV_KEY: Key part must be 64 characters long (or more)')
+        raise DotEnvVaultError('INVALID_DOTENV_KEY: Key part must be 64 characters long (or more)')
         
     # The environment is provided in the URI's query parameters.
     params = dict(parse_qsl(uri.query))
@@ -152,4 +152,3 @@ def _key_rotation(keys: list[dict]) -> str:
         except InvalidTag:
             continue
     raise DotEnvVaultError('INVALID_DOTENV_KEY: Key must be valid.')
-        
