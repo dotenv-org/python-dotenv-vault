@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [Unreleased](https://github.com/dotenv-org/python-dotenv-vault/compare/v0.5.1...master)
 
+## 0.6.0
+
+### Changed
+
+- Fix environment variable load [#12](https://github.com/dotenv-org/python-dotenv-vault/pull/12)
+
 ## 0.5.1
 
 ### Changed
