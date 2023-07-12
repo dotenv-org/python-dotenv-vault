@@ -43,7 +43,7 @@ def load_dotenv(
 
     """
     if "DOTENV_KEY" in os.environ:
-        vault_stream = parse_vault(DOTENV_VAULT_PATH)
+        vault_stream = parse_vault(open(DOTENV_VAULT_PATH))
         return dotenv.load_dotenv(
             stream=vault_stream,
             verbose=verbose,
