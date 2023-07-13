@@ -11,7 +11,14 @@ from cryptography.exceptions import InvalidTag
 import dotenv.main as dotenv
 
 
-DOTENV_VAULT_PATH = dotenv.find_dotenv(".env.vault")
+def load_dotenv_vault() -> str:
+    path = dotenv.find_dotenv()
+    if not path:
+        return path
+    path = os.path.dirname(path)
+    if '.env.vault' not in os.listdir(path):
+        raise FileNotFoundError('.env.vault is not in same directory as .env')
+    return f"{path}/.env.vault"
 
 
 def load_dotenv(
@@ -43,7 +50,7 @@ def load_dotenv(
 
     """
     if "DOTENV_KEY" in os.environ:
-        vault_stream = parse_vault(open(DOTENV_VAULT_PATH))
+        vault_stream = parse_vault(open(load_dotenv_vault()))
         return dotenv.load_dotenv(
             stream=vault_stream,
             verbose=verbose,
@@ -78,7 +85,7 @@ def parse_vault(vault_stream: io.IOBase) -> io.StringIO:
         raise DotEnvVaultError("NOT_FOUND_DOTENV_KEY: Cannot find ENV['DOTENV_KEY']")
 
     # Use the python-dotenv library to read the .env.vault file.
-    vault = dotenv.DotEnv(dotenv_path=DOTENV_VAULT_PATH, stream=vault_stream)
+    vault = dotenv.DotEnv(dotenv_path=load_dotenv_vault(), stream=vault_stream)
 
     # Extract segments from the DOTENV_KEY environment variable one by
     # one and retrieve the corresponding ciphertext from the vault
