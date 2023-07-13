@@ -77,5 +77,5 @@ class TestParsing(unittest.TestCase):
         find_dotenv.return_value = '/some/path/'
         with mock.patch('os.listdir') as mocked_listdir:
             mocked_listdir.return_value = ['.env', 'some_file']
-            with self.assertRaises(FileNotFoundError):
-                vault.load_dotenv_vault()
+            path = vault.load_dotenv_vault()
+            self.assertEqual(path, '/some/path/.env')

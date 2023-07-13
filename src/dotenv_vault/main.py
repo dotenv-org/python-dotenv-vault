@@ -3,6 +3,8 @@ from __future__ import annotations
 from base64 import b64decode
 import io
 import os
+import logging
+
 from typing import (IO, Optional, Union)
 from urllib.parse import urlparse, parse_qsl
 
@@ -10,6 +12,7 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.exceptions import InvalidTag
 import dotenv.main as dotenv
 
+logger = logging.getLogger(__name__)
 
 def load_dotenv_vault() -> str:
     path = dotenv.find_dotenv()
@@ -17,7 +20,9 @@ def load_dotenv_vault() -> str:
         return path
     path = os.path.dirname(path)
     if '.env.vault' not in os.listdir(path):
-        raise FileNotFoundError('.env.vault is not in same directory as .env')
+        # we fall back to .env
+        logger.warning("No .env.vault file found. Falling back to .env")
+        return f"{path}/.env"
     return f"{path}/.env.vault"
 
 
