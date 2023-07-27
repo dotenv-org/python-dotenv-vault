@@ -21,7 +21,7 @@ def load_dotenv_vault() -> str:
     path = os.path.dirname(path)
     if '.env.vault' not in os.listdir(path):
         # we fall back to .env
-        logger.warning("No .env.vault file found. Falling back to .env")
+        logger.warning(f"You set DOTENV_KEY but you are missing a .env.vault file at {path}. Did you forget to build it?")
         return f"{path}/.env"
     return f"{path}/.env.vault"
 
