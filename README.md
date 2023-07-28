@@ -33,6 +33,7 @@ SECRET_KEY=YOURSECRETKEYGOESHERE
 As early as possible in your application bootstrap process, load .env:
 
 ```python
+import os
 from dotenv_vault import load_dotenv
 
 load_dotenv()  # take environment variables from .env.
@@ -44,6 +45,7 @@ load_dotenv()  # take environment variables from .env.
 When your application loads, these variables will be available in `os.environ` or `os.getenv`:
 
 ```python
+import os
 s3_bucket = os.getenv("S3_BUCKET")
 print(s3_bucket)
 ```
