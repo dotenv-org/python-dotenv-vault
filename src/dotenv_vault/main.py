@@ -15,7 +15,7 @@ def load_dotenv(
     dotenv_path: Union[str, os.PathLike, None] = None,
     stream: Optional[IO[str]] = None,
     verbose: bool = False,
-    override: bool = False,
+    override: bool = True,
     interpolate: bool = True,
     encoding: Optional[str] = "utf-8",
 ) -> bool:
@@ -42,7 +42,6 @@ def load_dotenv(
     if "DOTENV_KEY" in os.environ:
         vault_stream = parse_vault(open(".env.vault"))
         return dotenv.load_dotenv(
-            dotenv_path=".env.vault",
             stream=vault_stream,
             verbose=verbose,
             override=override,

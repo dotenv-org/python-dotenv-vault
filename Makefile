@@ -13,6 +13,7 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 
 build: clean
+	pip install build
 	python -m build
 
 uninstall_local:
