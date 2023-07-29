@@ -33,8 +33,7 @@ SECRET_KEY=YOURSECRETKEYGOESHERE
 As early as possible in your application bootstrap process, load .env:
 
 ```python
-import os
-from dotenv_vault import load_dotenv
+from dotenv_vault import *
 
 load_dotenv()  # take environment variables from .env.
 
