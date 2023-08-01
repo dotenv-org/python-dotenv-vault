@@ -49,9 +49,9 @@ def load_dotenv(
             encoding=encoding
         )
     else:
-        stream = open(".env") if not stream else stream
+        dotenv_path = dotenv.find_dotenv(usecwd=True)
+        stream = open(dotenv_path) if not stream else stream
         return dotenv.load_dotenv(
-            dotenv_path=dotenv_path,
             stream=stream, 
             verbose=verbose, 
             override=override, 
