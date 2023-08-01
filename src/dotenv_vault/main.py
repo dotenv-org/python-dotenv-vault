@@ -45,9 +45,11 @@ def load_dotenv(
             stream=vault_stream,
             verbose=verbose,
             override=override,
-            interpolate=interpolate
+            interpolate=interpolate,
+            encoding=encoding
         )
     else:
+        stream = open(".env") if not stream else stream
         return dotenv.load_dotenv(
             dotenv_path=dotenv_path,
             stream=stream, 
