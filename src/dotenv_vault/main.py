@@ -3,12 +3,27 @@ from __future__ import annotations
 from base64 import b64decode
 import io
 import os
+import logging
+
 from typing import (IO, Optional, Union)
 from urllib.parse import urlparse, parse_qsl
 
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.exceptions import InvalidTag
 import dotenv.main as dotenv
+
+logger = logging.getLogger(__name__)
+
+def load_dotenv_vault() -> str:
+    path = dotenv.find_dotenv()
+    if not path:
+        return path
+    path = os.path.dirname(path)
+    if '.env.vault' not in os.listdir(path):
+        # we fall back to .env
+        logger.warning(f"You set DOTENV_KEY but you are missing a .env.vault file at {path}. Did you forget to build it?")
+        return f"{path}/.env"
+    return f"{path}/.env.vault"
 
 
 def load_dotenv(
@@ -40,7 +55,7 @@ def load_dotenv(
 
     """
     if "DOTENV_KEY" in os.environ:
-        vault_stream = parse_vault(open(".env.vault"))
+        vault_stream = parse_vault(open(load_dotenv_vault()))
         return dotenv.load_dotenv(
             stream=vault_stream,
             verbose=verbose,
@@ -75,7 +90,7 @@ def parse_vault(vault_stream: io.IOBase) -> io.StringIO:
         raise DotEnvVaultError("NOT_FOUND_DOTENV_KEY: Cannot find ENV['DOTENV_KEY']")
 
     # Use the python-dotenv library to read the .env.vault file.
-    vault = dotenv.DotEnv(dotenv_path=".env.vault", stream=vault_stream)
+    vault = dotenv.DotEnv(dotenv_path=load_dotenv_vault(), stream=vault_stream)
 
     # Extract segments from the DOTENV_KEY environment variable one by
     # one and retrieve the corresponding ciphertext from the vault

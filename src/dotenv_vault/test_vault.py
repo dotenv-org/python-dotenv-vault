@@ -1,12 +1,14 @@
 from io import StringIO
 import os
 import unittest
+from unittest import mock
 
 from dotenv.main import load_dotenv
 
 import dotenv_vault.main as vault
 
 class TestParsing(unittest.TestCase):
+
     TEST_KEYS = [
         # OK.
         ["dotenv://:key_0dec82bea24ada79a983dcc11b431e28838eae59a07a8f983247c7ca9027a925@dotenv.local/vault/.env.vault?environment=development",
@@ -23,7 +25,7 @@ class TestParsing(unittest.TestCase):
         # Missing environment.
         ["dotenv://:key_1234@dotenv.org/vault/.env.vault", False, ""]
     ]
-    
+
     def test_key_parsing(self):
         for test in self.TEST_KEYS:
             dotenv_key, should_pass, environment_key_check = test
@@ -49,7 +51,7 @@ class TestParsing(unittest.TestCase):
     DOTENV_VAULT_STAGING="uGHOx986lAWGU9s5mN5+b0jl0HAvNj4Mqs/zwN7Bl8UeV+C6hBg5JuKdi2AGGLka5g=="
     DOTENV_VAULT_PRODUCTION="YpDpGGf+eqiOPibziIQQbw4gBW/zfOBR6jow5B1UHYTTu6Kak6xy+qP/vXZWaPp4HOh2/Nu7gRK2CWfrbtk="
     """
-                
+
     def test_vault_parsing(self):
         old_dotenv_key = os.environ.get("DOTENV_KEY")
         os.environ["DOTENV_KEY"] = self.PARSE_TEST_KEY
@@ -61,3 +63,19 @@ class TestParsing(unittest.TestCase):
             os.unsetenv("DOTENV_KEY")
             if old_dotenv_key:
                 os.environ["DOTENV_KEY"] = old_dotenv_key
+
+    @mock.patch("dotenv.main.find_dotenv")
+    def test_load_dotenv_vault(self, find_dotenv):
+        find_dotenv.return_value = '/some/path/'
+        with mock.patch('os.listdir') as mocked_listdir:
+            mocked_listdir.return_value = ['.env', '.env.vault', 'some_file']
+            path = vault.load_dotenv_vault()
+            self.assertEqual(path, '/some/path/.env.vault')
+
+    @mock.patch("dotenv.main.find_dotenv")
+    def test_load_dotenv_vault_not_there(self, find_dotenv):
+        find_dotenv.return_value = '/some/path/'
+        with mock.patch('os.listdir') as mocked_listdir:
+            mocked_listdir.return_value = ['.env', 'some_file']
+            path = vault.load_dotenv_vault()
+            self.assertEqual(path, '/some/path/.env')
