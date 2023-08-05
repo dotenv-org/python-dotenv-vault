@@ -8,13 +8,13 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Changed
 
-- Fix fallback issue with gunicorn not respecting the current working directory when attempting to call `find_dotenv`. [#17](https://github.com/dotenv-org/python-dotenv-vault/pull/17)
+- Look for .env.vault file at same location as .env file. Finds .env file anywhere in app (just like original python lib) [#13](https://github.com/dotenv-org/python-dotenv-vault/pull/13)
 
 ## 0.6.1
 
 ### Changed
 
-- Look for .env.vault file at same location as .env file. Finds .env file anywhere in app (just like original python lib) [#13](https://github.com/dotenv-org/python-dotenv-vault/pull/13)
+- Fix fallback issue with gunicorn not respecting the current working directory when attempting to call `find_dotenv`. [#17](https://github.com/dotenv-org/python-dotenv-vault/pull/17)
 
 ## 0.6.0
 
