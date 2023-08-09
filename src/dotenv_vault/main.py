@@ -15,7 +15,7 @@ import dotenv.main as dotenv
 logger = logging.getLogger(__name__)
 
 def load_dotenv_vault() -> str:
-    path = dotenv.find_dotenv(filename=".env.vault")
+    path = dotenv.find_dotenv(filename=".env.vault", usecwd=True)
     if not path:
         return path
     path = os.path.dirname(path)

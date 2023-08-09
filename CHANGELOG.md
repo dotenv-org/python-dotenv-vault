@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [Unreleased](https://github.com/dotenv-org/python-dotenv-vault/compare/v0.5.1...master)
 
+## 0.6.3
+
+### Changed
+
+- Fixed a bug where it was looking up .env instead of .env.vault [#18](https://github.com/dotenv-org/python-dotenv-vault/pull/18)
+
 ## 0.6.2
 
 ### Changed
