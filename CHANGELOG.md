@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Changed
 
-- Bump Cryptography above 41.0.3 to resolve [#19](https://github.com/dotenv-org/python-dotenv-vault/issues/19) ([Vulnerable OpenSSL included in cryptography wheels](https://github.com/advisories/GHSA-5cpq-8wj7-hf2v) and [pyca/cryptography's wheels include vulnerable OpenSSL](https://github.com/advisories/GHSA-jm77-qphf-c4w8))
+- Bump Cryptography above 41.0.3 to resolve [#19](https://github.com/dotenv-org/python-dotenv-vault/issues/19) (High severity [CVE-2023-38325](https://nvd.nist.gov/vuln/detail/CVE-2023-38325))
 
 ## 0.6.3
 
