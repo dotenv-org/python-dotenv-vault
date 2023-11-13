@@ -5,7 +5,7 @@ import io
 import os
 import logging
 
-from typing import (IO, Optional, Union)
+from typing import IO, Optional, Union
 from urllib.parse import urlparse, parse_qsl
 
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
@@ -14,14 +14,17 @@ import dotenv.main as dotenv
 
 logger = logging.getLogger(__name__)
 
+
 def load_dotenv_vault() -> str:
     path = dotenv.find_dotenv(filename=".env.vault", usecwd=True)
     if not path:
         return path
     path = os.path.dirname(path)
-    if '.env.vault' not in os.listdir(path):
+    if ".env.vault" not in os.listdir(path):
         # we fall back to .env
-        logger.warning(f"You set DOTENV_KEY but you are missing a .env.vault file at {path}. Did you forget to build it?")
+        logger.warning(
+            f"You set DOTENV_KEY but you are missing a .env.vault file at {path}. Did you forget to build it?"
+        )
         return f"{path}/.env"
     return f"{path}/.env.vault"
 
@@ -61,17 +64,17 @@ def load_dotenv(
             verbose=verbose,
             override=override,
             interpolate=interpolate,
-            encoding=encoding
+            encoding=encoding,
         )
     else:
         dotenv_path = dotenv.find_dotenv(usecwd=True)
         stream = open(dotenv_path) if not stream else stream
         return dotenv.load_dotenv(
-            stream=stream, 
-            verbose=verbose, 
-            override=override, 
-            interpolate=interpolate, 
-            encoding=encoding
+            stream=stream,
+            verbose=verbose,
+            override=override,
+            interpolate=interpolate,
+            encoding=encoding,
         )
 
 
@@ -83,8 +86,7 @@ KEY_LENGTH = 64
 
 
 def parse_vault(vault_stream: io.IOBase) -> io.StringIO:
-    """Parse information from DOTENV_KEY, and decrypt vault.
-    """
+    """Parse information from DOTENV_KEY, and decrypt vault."""
     dotenv_key = os.environ.get("DOTENV_KEY")
     if dotenv_key is None:
         raise DotEnvVaultError("NOT_FOUND_DOTENV_KEY: Cannot find ENV['DOTENV_KEY']")
@@ -96,18 +98,17 @@ def parse_vault(vault_stream: io.IOBase) -> io.StringIO:
     # one and retrieve the corresponding ciphertext from the vault
     # data.
     keys = []
-    for dotenv_key_entry in [i.strip() for i in dotenv_key.split(',')]:
+    for dotenv_key_entry in [i.strip() for i in dotenv_key.split(",")]:
         key, environment_key = parse_key(dotenv_key_entry)
 
         ciphertext = vault.dict().get(environment_key)
 
         if not ciphertext:
-            raise DotEnvVaultError(f"NOT_FOUND_DOTENV_ENVIRONMENT: Cannot locate environment {environment_key} in your .env.vault file. Run 'npx dotenv-vault build' to include it.")
+            raise DotEnvVaultError(
+                f"NOT_FOUND_DOTENV_ENVIRONMENT: Cannot locate environment {environment_key} in your .env.vault file. Run 'npx dotenv-vault build' to include it."
+            )
 
-        keys.append({
-            'encrypted_key': key,
-            'ciphertext': ciphertext
-        })
+        keys.append({"encrypted_key": key, "ciphertext": ciphertext})
 
     # Try decrypting environments one-by-one in the order they appear
     # in the DOTENV_KEY environment variable.
@@ -115,7 +116,7 @@ def parse_vault(vault_stream: io.IOBase) -> io.StringIO:
 
     # Return the decrypted data as a text stream that we can pass to
     # the python-dotenv library.
-    return io.StringIO(decrypted.decode('utf-8'))
+    return io.StringIO(decrypted.decode("utf-8"))
 
 
 def parse_key(dotenv_key):
@@ -123,28 +124,30 @@ def parse_key(dotenv_key):
     # These segments are in the form of URIs (see
     # https://www.dotenv.org/docs/security/dotenv-key).
     uri = urlparse(dotenv_key)
-    
+
     # The 64-character encryption key is stored in the password field
     # of the URI, possibly with a prefix.
     key = uri.password
-    if len(key) < KEY_LENGTH: 
-        raise DotEnvVaultError('INVALID_DOTENV_KEY: Key part must be 64 characters long (or more)')
-        
+    if len(key) < KEY_LENGTH:
+        raise DotEnvVaultError(
+            "INVALID_DOTENV_KEY: Key part must be 64 characters long (or more)"
+        )
+
     # The environment is provided in the URI's query parameters.
     params = dict(parse_qsl(uri.query))
-    vault_environment = params.get('environment')
+    vault_environment = params.get("environment")
     if not vault_environment:
-        raise DotEnvVaultError('INVALID_DOTENV_KEY: Missing environment part')
+        raise DotEnvVaultError("INVALID_DOTENV_KEY: Missing environment part")
 
     # Form the key used to store the ciphertext for this environment's
     # settings in the .env.vault file.
-    environment_key = f'DOTENV_VAULT_{vault_environment.upper()}'
+    environment_key = f"DOTENV_VAULT_{vault_environment.upper()}"
 
     return key, environment_key
 
 
 def _decrypt(ciphertext: str, key: str) -> bytes:
-    """decrypt method will decrypt via AES-GCM 
+    """decrypt method will decrypt via AES-GCM
     return: decrypted keys in bytes
     """
     # Remove any prefix from the encryption key (at this point, we
@@ -156,15 +159,14 @@ def _decrypt(ciphertext: str, key: str) -> bytes:
     # file, and the first 12 bytes of the decoded data are used as the
     # AES nonce value.
     ciphertext = b64decode(ciphertext)
-    return aesgcm.decrypt(ciphertext[:12], ciphertext[12:], b'')
+    return aesgcm.decrypt(ciphertext[:12], ciphertext[12:], b"")
 
 
 def _key_rotation(keys: list[dict]) -> str:
-    """Iterate through list of keys to check for correct one.
-    """
+    """Iterate through list of keys to check for correct one."""
     for k in keys:
         try:
-            return _decrypt(ciphertext=k['ciphertext'], key=k['encrypted_key'])
+            return _decrypt(ciphertext=k["ciphertext"], key=k["encrypted_key"])
         except InvalidTag:
             continue
-    raise DotEnvVaultError('INVALID_DOTENV_KEY: Key must be valid.')
+    raise DotEnvVaultError("INVALID_DOTENV_KEY: Key must be valid.")
