@@ -40,6 +40,6 @@ setup(
     ],
     install_requires=[
         'python-dotenv~=0.21.0',
-        'cryptography<41.0.0,>=3.1.0'
+        'cryptography<42.0.0,>41.0.3'
     ],
 )

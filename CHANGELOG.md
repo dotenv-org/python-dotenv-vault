@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [Unreleased](https://github.com/dotenv-org/python-dotenv-vault/compare/v0.5.1...master)
 
+## 0.6.4
+
+### Changed
+
+- Bump Cryptography above 41.0.3 to resolve [#19](https://github.com/dotenv-org/python-dotenv-vault/issues/19) (High severity [CVE-2023-38325](https://nvd.nist.gov/vuln/detail/CVE-2023-38325))
+
 ## 0.6.3
 
 ### Changed

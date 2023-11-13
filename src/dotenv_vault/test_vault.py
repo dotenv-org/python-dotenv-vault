@@ -79,3 +79,82 @@ class TestParsing(unittest.TestCase):
             mocked_listdir.return_value = ['.env', 'some_file']
             path = vault.load_dotenv_vault()
             self.assertEqual(path, '/some/path/.env')
+
+
+class TestLoadDotenv:
+
+    @mock.patch.dict(os.environ, {"DOTENV_KEY": "secret_key"}, clear=True)
+    @mock.patch("builtins.open", new_callable=mock.mock_open, read_data="KEY=VALUE")
+    @mock.patch("dotenv_vault.main.parse_vault")
+    @mock.patch("dotenv_vault.main.load_dotenv_vault")
+    @mock.patch("dotenv_vault.main.dotenv.load_dotenv")
+    def test_load_encrypted_env(
+        self, mock_load_dotenv,
+        mock_load_dotenv_vault,
+        mock_parse_vault,
+        mock_open
+    ):
+            mock_parse_vault.return_value = "stream_with_decrypted_data"
+            mock_load_dotenv_vault.return_value = "this_is_the_valut"
+            mock_load_dotenv.return_value = True
+
+            assert vault.load_dotenv() == True
+            mock_load_dotenv_vault.assert_called_once()
+            mock_parse_vault.assert_called_once()
+            mock_open.assert_called_once_with(mock_load_dotenv_vault.return_value)
+            mock_load_dotenv.assert_called_once_with(
+                stream=mock_parse_vault.return_value, 
+                verbose=False, 
+                override=True, 
+                interpolate=True, 
+                encoding="utf-8"
+            )
+
+    @mock.patch.dict(os.environ, {"NOT_DOTENV_KEY": "shouldnt_be_detected"}, clear=True)
+    @mock.patch("builtins.open", new_callable=mock.mock_open, read_data="KEY=VALUE")
+    @mock.patch("dotenv_vault.main.dotenv.find_dotenv")
+    @mock.patch("dotenv_vault.main.dotenv.load_dotenv")
+    @mock.patch.dict(os.environ, {}, clear=True)
+    def test_load_unencrypted_env(self, 
+            mock_load_dotenv,
+            mock_find_dotenv,
+            mock_open
+        ):
+        mock_find_dotenv.return_value = "path_to_dotenv_file"
+        mock_load_dotenv.return_value = True
+
+        assert vault.load_dotenv() == True
+        mock_open.assert_called_once_with(mock_find_dotenv.return_value)
+        mock_find_dotenv.assert_called_once_with(usecwd=True)
+        mock_load_dotenv.assert_called_once_with(
+                stream=mock_open.return_value, 
+                verbose=False, 
+                override=True, 
+                interpolate=True, 
+                encoding="utf-8"
+        )
+
+    @mock.patch.dict(os.environ, {"NOT_DOTENV_KEY": "shouldnt_be_detected"}, clear=True)
+    @mock.patch("builtins.open", new_callable=mock.mock_open, read_data="KEY=VALUE")
+    @mock.patch("dotenv_vault.main.dotenv.find_dotenv")
+    @mock.patch("dotenv_vault.main.dotenv.load_dotenv")
+    @mock.patch.dict(os.environ, {}, clear=True)
+    def test_load_with_stream_provided(self, 
+            mock_load_dotenv,
+            mock_find_dotenv,
+            mock_open
+        ):
+        mock_find_dotenv.return_value = "path_to_dotenv_file"
+        mock_load_dotenv.return_value = True
+        test_stream_value = "test_stream_value"
+
+        assert vault.load_dotenv(stream=test_stream_value) == True
+        mock_open.assert_not_called()
+        mock_find_dotenv.assert_called_once_with(usecwd=True)
+        mock_load_dotenv.assert_called_once_with(
+                stream=test_stream_value, 
+                verbose=False, 
+                override=True, 
+                interpolate=True, 
+                encoding="utf-8"
+        )
