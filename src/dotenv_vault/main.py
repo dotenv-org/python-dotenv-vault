@@ -42,7 +42,7 @@ def load_dotenv(
 
     If the `DOTENV_KEY` environment variable is set, `load_dotenv`
     will load encrypted environment settings from the `.env.vault`
-    file in the current path.
+    file in the current path or in the dotenv_path.
 
     If the `DOTENV_KEY` environment variable is not set, `load_dotenv`
     falls back to the behavior of the python-dotenv library, loading a
@@ -54,9 +54,15 @@ def load_dotenv(
     the `override` flag.
 
     """
+    old_cwd = None
+
+    if dotenv_path:
+        old_cwd = os.getcwd()
+        os.chdir(dotenv_path)
+        
     if "DOTENV_KEY" in os.environ:
         vault_stream = parse_vault(open(load_dotenv_vault()))
-        return dotenv.load_dotenv(
+        result = dotenv.load_dotenv(
             stream=vault_stream,
             verbose=verbose,
             override=override,
@@ -66,14 +72,18 @@ def load_dotenv(
     else:
         dotenv_path = dotenv.find_dotenv(usecwd=True)
         stream = open(dotenv_path) if not stream else stream
-        return dotenv.load_dotenv(
+        result = dotenv.load_dotenv(
             stream=stream, 
             verbose=verbose, 
             override=override, 
             interpolate=interpolate, 
             encoding=encoding
         )
-
+    
+    if not old_cwd is None:
+        os.chdir(old_cwd)
+    
+    return result
 
 class DotEnvVaultError(Exception):
     pass
