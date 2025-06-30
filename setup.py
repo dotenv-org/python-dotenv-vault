@@ -39,7 +39,7 @@ setup(
     'dotenv-vault'
     ],
     install_requires=[
-        'python-dotenv~=1.1.1',
-        'cryptography>=45.0.0'
+        'python-dotenv>=0.21.0',
+        'cryptography>=41.0.0'
     ],
 )
