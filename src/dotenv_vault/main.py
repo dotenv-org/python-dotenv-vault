@@ -65,7 +65,8 @@ def load_dotenv(
         )
     else:
         dotenv_path = dotenv.find_dotenv(usecwd=True)
-        stream = open(dotenv_path) if not stream else stream
+        if not stream:
+            stream = open(dotenv_path) if dotenv_path else None
         return dotenv.load_dotenv(
             stream=stream, 
             verbose=verbose, 
